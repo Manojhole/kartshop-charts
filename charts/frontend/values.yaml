@@ -1,0 +1,51 @@
+replicaCount: 1
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+containerPort: 8080
+service:
+  type: ClusterIP
+  port: 8080
+
+# No CPU or memory requests/limits are set by this chart.
+resources: {}
+
+probes:
+  readiness:
+    path: /_healthz
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  liveness:
+    path: /_healthz
+    initialDelaySeconds: 20
+    periodSeconds: 20
+    timeoutSeconds: 2
+    failureThreshold: 3
+
+env:
+  BASE_URL: /
+  PORT: "8080"
+  LISTEN_ADDR: "0.0.0.0"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+  CURRENCY_SERVICE_ADDR: "currencyservice:7000"
+  CART_SERVICE_ADDR: "cartservice:7070"
+  RECOMMENDATION_SERVICE_ADDR: "recommendationservice:8080"
+  CHECKOUT_SERVICE_ADDR: "checkoutservice:5050"
+  SHIPPING_SERVICE_ADDR: "shippingservice:50051"
+  AD_SERVICE_ADDR: "adservice:9555"
+  SHOPPING_ASSISTANT_SERVICE_ADDR: "shoppingassistantservice:8080"
+
+istio:
+  enabled: true
+  gatewayNamespace: istio-system
+  gatewayName: ""
+  host: frontend.dev.vegz.online
+  httpsRedirect: false

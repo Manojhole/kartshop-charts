@@ -1,0 +1,19 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "kartshop-frontend.fullname" . }}
+  labels:
+    {{- include "kartshop-frontend.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ .Values.istio.host | quote }}
+  gateways:
+    - {{ printf "%s/%s" .Values.istio.gatewayNamespace (default (include "kartshop-frontend.fullname" .) .Values.istio.gatewayName) | quote }}
+  http:
+    - route:
+        - destination:
+            host: {{ include "kartshop-frontend.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: {{ .Values.service.port }}
+{{- end }}

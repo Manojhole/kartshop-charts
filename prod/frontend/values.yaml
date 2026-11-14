@@ -1,1 +1,12 @@
+replicaCount: 2
 
+image:
+  repository: REPLACE_WITH_AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/frontend
+  tag: SET_BY_CI
+  pullPolicy: IfNotPresent
+
+istio:
+  enabled: true
+  gatewayNamespace: istio-system
+  host: vegz.online
+  httpsRedirect: false
